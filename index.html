@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Messanger App</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,800" rel="stylesheet">
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></scr ipt>
+    <script src="https://use.fontawesome.com/6d43888a53.js"></script>
+
+
+    <script>
+
+ function sendMessage(){
+
+   if(document.getElementById("userInput").value == 0){
+   	console.log("You didn't write anything!");
+   } else{
+
+    //create li element
+   var newMessage = document.createElement("li");  
+   //find li with ID last message and assign it variable name
+   var lastMessage = document.getElementById("last-message");
+   //remove ID last message
+   lastMessage.id = "";
+   
+   //pass newly created li and last message li to insertAfter function
+   insertAfter(lastMessage, newMessage);
+}
+
+
+
+}
+
+function insertAfter(referenceNode, newNode){
+
+	//insert newly created li with ID 'last-message'
+	referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+	newNode.id = "last-message";
+    //create div with class "message recived for css styling"
+	var newMessageContent = document.createElement("div");
+		newMessageContent.className +="message received";
+   //Get value of input and set it to variable sent_messsage
+   var sent_message = document.getElementById("userInput").value;
+   //Insert sent_message into div
+   newMessageContent.innerHTML = "<p>" + sent_message + "</p>"; 
+   //clear input field 
+   document.getElementById("userInput").value = "";
+
+    //append div to newly created li 
+	newNode.appendChild(newMessageContent);
+
+	//scroll the new message into view
+	newMessageContent.scrollIntoView();
+
+	addResponse(sent_message);
+
+}
+
+function addResponse(sent_message){
+
+	$.getJSON("replies.json", function(result){
+	
+	 if(sent_message.toLowerCase() == "hi"){
+		console.log(result.Greeting[0]);
+	} else {
+		console.log(result.Positive[0]);
+	}
+
+	});
+}
+
+    </script>
+
+   
+  </head>
+  <body>
+  	<h2 class="title">Chatty App</h2>
+  	<div class="message-wrapper">
+	  	<div class="txt-body">
+	  		<ul>
+	  			<li><div class="message sent"><p>"Hey What's Up?"</p></div></li>
+	  		    <li><div class="message received"><p>"n2m u?"</p></div></li>
+	  		   	<li><div class="message sent"><p>"Going to the mall."</p></div></li>
+	  		   	<li><div class="message received"><p>"cool"</p></div></li>
+	  		    <li><div class="message sent"><p>"Want to meet up later?"</p></div></li>
+	  		    <li id="last-message"><div class="message received"><p>"No thanks."</p></div></li>
+
+
+	  		 </ul>
+	  	</div>
+
+
+	  	<div class="input-body">  		
+		  		<input id="userInput" placeholder="Enter a message">
+		  		<button onclick="sendMessage()"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+
+
+</button>
+	  	</div>
+  </div>
+  
+  </body>
+</html>
